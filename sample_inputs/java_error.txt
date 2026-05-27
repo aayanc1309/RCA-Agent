@@ -1,0 +1,21 @@
+2026-05-27 16:55:12.443 ERROR 1 --- [http-nio-8080-exec-7] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException: Cannot invoke "com.example.payments.model.PaymentMethod.getCardToken()" because "paymentMethod" is null] with root cause
+
+java.lang.NullPointerException: Cannot invoke "com.example.payments.model.PaymentMethod.getCardToken()" because "paymentMethod" is null
+	at com.example.payments.service.PaymentProcessorService.chargeCard(PaymentProcessorService.java:142)
+	at com.example.payments.service.PaymentProcessorService.processPayment(PaymentProcessorService.java:89)
+	at com.example.payments.controller.CheckoutController.submitOrder(CheckoutController.java:67)
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:897)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
+
+Caused by: java.lang.IllegalStateException: Payment session expired or invalid; no PaymentMethod bound to session id=sess_7f3ab92c
+	at com.example.payments.session.PaymentSessionManager.resolvePaymentMethod(PaymentSessionManager.java:204)
+	at com.example.payments.service.PaymentProcessorService.chargeCard(PaymentProcessorService.java:138)
+	... 7 more
+
+Caused by: com.example.payments.exception.SessionExpiredException: Session sess_7f3ab92c not found in Redis cache; TTL may have elapsed
+	at com.example.payments.cache.RedisSessionStore.load(RedisSessionStore.java:77)
+	at com.example.payments.session.PaymentSessionManager.resolvePaymentMethod(PaymentSessionManager.java:198)
+	... 8 more

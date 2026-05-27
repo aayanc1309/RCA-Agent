@@ -1,0 +1,48 @@
+Traceback (most recent call last):
+  File "/app/myproject/wsgi.py", line 16, in <module>
+    application = get_wsgi_application()
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/wsgi.py", line 75, in __init__
+    self.load_middleware()
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 49, in load_middleware
+    mw_instance = middleware(adapted_handler)
+  File "/app/myproject/middleware.py", line 22, in __init__
+    self.user_cache = UserProfileCache(settings.CACHE_TIMEOUT)
+  File "/app/accounts/cache.py", line 18, in __init__
+    self.timeout = int(timeout)
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/gunicorn/arbiter.py", line 583, in spawn_worker
+    worker.init_process()
+  File "/usr/local/lib/python3.11/site-packages/gunicorn/workers/sync.py", line 129, in init_process
+    super().init_process()
+  File "/usr/local/lib/python3.11/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.run()
+  File "/app/myproject/views.py", line 134, in get_user_profile
+    profile = UserProfile.objects.select_related('account').get(user_id=user_id)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 637, in get
+    raise self.model.DoesNotExist(
+myproject.accounts.models.UserProfile.DoesNotExist: UserProfile matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/myproject/views.py", line 148, in get_user_profile
+    fallback = _load_fallback_profile(user_id)
+  File "/app/myproject/views.py", line 201, in _load_fallback_profile
+    raw = redis_client.get(f"profile:{user_id}")
+  File "/app/myproject/services/cache_service.py", line 67, in get
+    return self._client.get(key).decode('utf-8')
+AttributeError: 'NoneType' object has no attribute 'decode'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/myproject/views.py", line 210, in get_user_profile
+    raise ProfileServiceError(f"Failed to retrieve profile for user {user_id}") from exc
+myproject.services.exceptions.ProfileServiceError: Failed to retrieve profile for user 48291
+
+[2026-05-27 16:42:01,837] ERROR in app: Exception on /api/v2/users/48291/profile [GET]
+HTTP/1.1" 500 Internal Server Error

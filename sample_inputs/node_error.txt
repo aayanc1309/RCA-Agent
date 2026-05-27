@@ -1,0 +1,17 @@
+(node:31842) UnhandledPromiseRejectionWarning: Error: connect ECONNREFUSED 127.0.0.1:5432
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1148:16)
+(node:31842) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag --unhandled-rejections=strict (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode).
+
+Error: DatabaseConnectionError: connect ECONNREFUSED 127.0.0.1:5432
+    at Pool.connect (/app/node_modules/pg-pool/index.js:213:11)
+    at async getOrdersByUser (/app/src/repositories/orderRepository.js:48:20)
+    at async OrderService.fetchUserOrders (/app/src/services/orderService.js:72:24)
+    at async exports.getUserOrders (/app/src/controllers/orderController.js:31:18)
+    at async /app/node_modules/express-async-errors/index.js:5:3
+    at Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)
+    at next (/app/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/app/node_modules/express/lib/router/route.js:112:3)
+
+[2026-05-27T11:19:04.882Z] ERROR Database pool exhausted — max connections: 10, active: 10, idle: 0, waiting: 47
+[2026-05-27T11:19:04.883Z] ERROR Failed to acquire connection after 30000ms timeout
+[2026-05-27T11:19:04.884Z] FATAL Shutting down order service — unrecoverable DB connection failure
